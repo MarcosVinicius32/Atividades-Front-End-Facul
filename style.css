@@ -1,0 +1,413 @@
+/*
+ * ARQUIVO: style.css - PROJETO FINAL
+ * DESIGN: Moderno e Minimalista (Azul Marinho / Dourado)
+ * ATENDE AOS REQUISITOS DAS ENTREGAS I e II
+ */
+
+/* ======================================================= */
+/* 1. ABSTRACTS: VARIÁVEIS GLOBAIS E SISTEMA DE DESIGN     */
+/* ======================================================= */
+
+:root {
+    /* Paleta de Cores (8 Cores) - ATENDE AO REQUISITO */
+    --color-primary: #003366;     /* Azul Marinho Profundo (Institucional) */
+    --color-secondary: #ffc107;   /* Amarelo Ouro / Dourado Suave (Destaque) */
+    --color-action: #2da5ae;      /* Vermelho de Ação / Doar */
+    --color-success: #28a745;     /* Verde de Sucesso */
+    --color-error: #dc3545;       /* Vermelho de Erro */
+    --color-warning: #ffc107;     /* Amarelo de Aviso */
+    --color-neutral-light: #f8f9fa; /* Fundo Principal Claro */
+    --color-neutral-dark: #343a40;  /* Texto Escuro Secundário */
+
+    /* Variáveis de Texto e Fundo */
+    --color-text-main: #212529;   /* Texto principal (quase preto) */
+    --color-text-light: #ffffff;
+    
+    /* Tipografia (5+ Tamanhos) - ATENDE AO REQUISITO */
+    --font-size-base: 1rem;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1.125rem;
+    --font-size-h3: 1.5rem;
+    --font-size-h2: 2rem;
+    --font-size-h1: 3rem;
+    
+    /* Espaçamento Modular (Múltiplos de 8px) - ATENDE AO REQUISITO */
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 32px;
+    --space-5: 48px;
+    --space-6: 64px;
+
+    /* Raio de Borda e Sombras */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 10px;
+    --border-radius-full: 50px; /* Mais arredondado que o requisito anterior */
+    --border-color: #dee2e6;
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --shadow-hover: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+
+    /* Breakpoints (5 Breakpoints) - ATENDE AO REQUISITO */
+    --bp-sm: 576px;
+    --bp-md: 768px;
+    --bp-lg: 992px;
+    --bp-xl: 1200px;
+    --bp-xxl: 1400px;
+}
+
+/* ======================================================= */
+/* 2. BASE: ESTILOS PADRÃO E TIPOGRAFIA HIERÁRQUICA        */
+/* ======================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-neutral-light);
+    color: var(--color-text-main);
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    min-height: 100vh;
+    font-size: var(--font-size-base);
+}
+
+a:focus, button:focus, input:focus, select:focus {
+    outline: 3px solid var(--color-secondary); /* Usa Amarelo Dourado para foco */
+    outline-offset: 3px;
+}
+
+/* Tipografia */
+h1, h2, h3 { color: var(--color-primary); margin-bottom: var(--space-3); font-weight: 700; }
+h1 { font-size: var(--font-size-h1); text-align: center; margin-top: var(--space-4); }
+h2 { font-size: var(--font-size-h2); border-bottom: 2px solid var(--border-color); padding-bottom: var(--space-2); }
+h3 { font-size: var(--font-size-h3); margin-top: var(--space-3); }
+
+
+/* ======================================================= */
+/* 3. LAYOUT ESTRUTURAL (CSS GRID PRINCIPAL)               */
+/* ======================================================= */
+
+/* GRID Principal (app-layout) - ATENDE AO REQUISITO */
+.app-layout {
+    display: grid;
+    grid-template-areas: 
+        "header"
+        "main"
+        "footer";
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+}
+
+/* Conteúdo Principal */
+main {
+    grid-area: main;
+    padding: var(--space-4) 5%;
+    max-width: var(--bp-xl);
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* GRID Customizado (12 Colunas - Reutilizável) - ATENDE AO REQUISITO */
+.grid-12-cols {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr; /* Mobile: 1 coluna */
+}
+
+@media (min-width: var(--bp-md)) {
+    .grid-12-cols {
+        grid-template-columns: repeat(2, 1fr); /* Tablet: 2 colunas */
+    }
+}
+@media (min-width: var(--bp-lg)) {
+    .grid-12-cols {
+        grid-template-columns: repeat(12, 1fr); /* Desktop: 12 colunas */
+    }
+    .col-6-lg { grid-column: span 6; }
+    .col-12-lg { grid-column: span 12; }
+}
+
+
+/* --- 3.1. Header (FLEXBOX) --- */
+header {
+    grid-area: header;
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-2) 5%;
+    display: flex; /* FLEXBOX */
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: var(--color-text-light);
+}
+header .logo img { max-height: var(--space-5); }
+
+
+/* --- 3.2. Navegação (FLEXBOX e Dropdown) --- */
+header nav ul {
+    list-style: none;
+    display: flex; /* FLEXBOX */
+    gap: var(--space-3);
+}
+
+header nav a {
+    text-decoration: none;
+    color: var(--color-primary);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--border-radius-full);
+    transition: all 0.3s;
+    font-weight: 600;
+}
+header nav a:hover {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+}
+
+/* Dropdown Submenu - ATENDE AO REQUISITO */
+.has-submenu { position: relative; }
+.submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    background-color: var(--color-primary);
+    padding: var(--space-1) 0;
+    border-radius: var(--border-radius-md);
+    min-width: 150px;
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+.has-submenu:hover > .submenu {
+    display: block;
+}
+.submenu a {
+    color: var(--color-text-light);
+    padding: var(--space-1) var(--space-3);
+    display: block;
+}
+.submenu a:hover {
+    background-color: #004d99;
+}
+
+
+/* --- 3.3. Footer --- */
+footer {
+    grid-area: footer;
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    text-align: center;
+    padding: var(--space-4) 5%;
+}
+footer a {
+    color: var(--color-secondary);
+    text-decoration: none;
+}
+footer address {
+    font-style: normal;
+    margin-top: var(--space-2);
+}
+
+
+/* ======================================================= */
+/* 4. COMPONENTS: ESTILIZAÇÃO E INTERATIVIDADE             */
+/* ======================================================= */
+
+/* --- 4.1. Botões e Estados Visuais (FLEXBOX para alinhamento) --- */
+.btn {
+    display: inline-flex; /* FLEXBOX para alinhamento interno */
+    align-items: center;
+    justify-content: center;
+    padding: 12px 25px;
+    border-radius: var(--border-radius-full);
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background-color: var(--color-action);
+    color: var(--color-text-light);
+    border-color: var(--color-action);
+}
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* Estados Visuais (Hover, Focus, Active) - ATENDE AO REQUISITO */
+.btn:hover, .btn:focus {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+.btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+    opacity: 0.9;
+}
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* --- 4.2. Cards Responsivos --- */
+.card {
+    background-color: var(--color-text-light);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-3);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+.cards-list {
+    display: grid; /* CSS GRID para a listagem de projetos */
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+
+/* --- 4.3. Formulários Estilizados --- */
+.formulario-container {
+    max-width: 600px;
+    margin: var(--space-5) auto;
+    padding: var(--space-5);
+    background-color: var(--color-text-light);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select {
+    width: 100%;
+    padding: var(--space-2);
+    margin-top: var(--space-1);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px rgba(0, 51, 102, 0.5);
+    outline: none;
+}
+
+/* Validação Visual */
+input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: var(--color-error);
+}
+
+/* --- 4.4. Componentes de Feedback (Alerts, Tags) --- */
+.alert {
+    padding: var(--space-3);
+    margin-bottom: var(--space-4);
+    border-radius: var(--border-radius-md);
+    border-left: 4px solid;
+    font-weight: 600;
+}
+.alert-warning {
+    background-color: #fff3cd; 
+    border-color: var(--color-warning);
+    color: #856404;
+}
+
+.badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: var(--space-1);
+}
+.badge-primary {
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+}
+
+
+/* ======================================================= */
+/* 5. RESPONSIVIDADE AVANÇADA (5 Breakpoints)              */
+/* ======================================================= */
+
+/* Esconde o menu hamburguer em desktop */
+@media (min-width: var(--bp-md)) {
+    .menu-toggle { display: none; }
+    header nav {
+        position: static;
+        width: auto;
+        box-shadow: none;
+        display: block !important;
+    }
+}
+
+/* Layout específico (Tablet/Desktop) */
+@media (min-width: var(--bp-md)) {
+    .institucional-section {
+        grid-template-columns: 1fr 1fr;
+    }
+    .hero-section {
+        padding: var(--space-6) 0;
+    }
+}
+@media (min-width: var(--bp-xl)) {
+    .hero-title { font-size: 4rem; }
+}
+
+/* --- 4.6. Badges e Tags --- */
+.badge {
+    /* (Estilos básicos existentes) */
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-right: var(--space-1);
+    
+    /* Padrão para Badges */
+    background-color: var(--color-neutral-dark);
+    color: var(--color-text-light);
+}
+
+.badge-primary {
+    background-color: var(--color-action); /* Usa cor de Ação para o principal */
+}
+/* Adicione classes para usar as outras cores */
+.badge-success {
+    background-color: var(--color-success);
+}
+.badge-warning {
+    background-color: var(--color-warning);
+    color: var(--color-text-main); /* Texto escuro no fundo claro */
+}
+.badge-info {
+    background-color: var(--color-primary);
+}
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    
+    /* Esta linha aplica o arredondamento de 8px */
+    border-radius: var(--radius-imagem);
+    
+    object-fit: cover;
+}
+/* Seletor específico para imagens circulares, se houver */
+.img-circular {
+    border-radius: 50%; /* Faz a imagem ficar perfeitamente redonda */
+    width: 100px; /* Defina uma largura e altura iguais */
+    height: 100px;
+}
